@@ -62,6 +62,39 @@ Humanoid.prototype.greet = function() {
 Humanoid.prototype.destroy = function() {
   return `${this.name} was removed from the game.`;
 }
+
+
+// Stretch
+function Villian(attributes) {
+  Humanoid.call(this, attributes);
+  this.manaPoints = attributes.manaPoints;
+  this.damageReduction = attributes.damageReduction;
+  
+}
+Villian.prototype = Object.create(Humanoid.prototype);
+Villian.prototype.brutal_strike = function(target) {
+  let totaldamage = 50 * (1-target.damageReduction);
+  target.healthPoints -= totaldamage;
+  if (target.healthPoints <= 0) {
+    return `${this.name} used Brutal Strike on ${target.name}, dealed ${totaldamage} dmg. ${target.destroy()}`;
+  }
+  return `${this.name} used Brutal Strike on ${target.name}, dealed ${totaldamage} dmg, ${target.name}'s HP is ${target.healthPoints}`;
+};
+
+function Hero(attributes) {
+  Humanoid.call(this, attributes);
+  this.manaPoints = attributes.manaPoints;
+  this.damageReduction = attributes.damageReduction;
+}
+Hero.prototype = Object.create(Humanoid.prototype);
+Hero.prototype.dragon_strike = function(target) {
+  let totaldamage = 45 * (1-target.damageReduction);
+  target.healthPoints -= totaldamage;
+  if (target.healthPoints <= 0) {
+    return `${this.name} used Dragon Strike on ${target.name}, dealed ${totaldamage} dmg. ${target.destroy()}`;
+  }
+  return `${this.name} used Dragon Strike on ${target.name}, dealed ${totaldamage} dmg, ${target.name}'s HP is ${target.healthPoints}`;
+};
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
@@ -123,6 +156,17 @@ Humanoid.prototype.destroy = function() {
     language: 'Elvish',
   });
 
+  const myHero = new Hero({
+    healthPoints: 200,
+    name: 'Arius the Defender',
+    damageReduction: 0.22
+  });
+  const theVillian = new Villian({
+    healthPoints: 200,
+    name: 'Terror Blade',
+    damageReduction: 0.2
+  });
+
   console.log(mage.createdAt); // Today's date
   console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
   console.log(swordsman.healthPoints); // 15
@@ -134,7 +178,17 @@ Humanoid.prototype.destroy = function() {
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
-
+  console.log(theVillian.brutal_strike(myHero));
+  console.log(myHero.dragon_strike(theVillian));
+  console.log(myHero.dragon_strike(theVillian));
+  console.log(theVillian.brutal_strike(myHero));
+  console.log(myHero.dragon_strike(theVillian));
+  console.log(theVillian.brutal_strike(myHero));
+  console.log(myHero.dragon_strike(theVillian));
+  console.log(myHero.dragon_strike(theVillian));
+  console.log(theVillian.brutal_strike(myHero));
+  console.log(myHero.dragon_strike(theVillian));
+  
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
